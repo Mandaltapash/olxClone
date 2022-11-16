@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/custom_adapter_ad_layout_height"
+    android:elevation="@dimen/custom_adapter_ad_elevation"
+    android:background="@drawable/custom_background_register_add"
+    android:layout_marginTop="@dimen/custom_adapter_ad_layout_margin_top">
+
+    <ImageView
+        android:id="@+id/imageAd"
+        android:layout_width="@dimen/custom_adapter_ad_image_layout_width"
+        android:layout_height="@dimen/custom_adapter_ad_image_layout_height"
+        android:layout_marginStart="@dimen/custom_adapter_ad_image_layout_margin_start"
+        android:layout_marginTop="@dimen/custom_adapter_ad_image_layout_margin_top"
+        android:elevation="@dimen/custom_adapter_ad_image_elevation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/standard" />
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="@dimen/custom_adapter_ad_title_layout_width"
+        android:layout_height="@dimen/custom_adapter_ad_title_layout_height"
+        android:layout_marginStart="@dimen/custom_adapter_ad_title_layout_margin_start"
+        android:layout_marginTop="@dimen/custom_adapter_ad_title_layout_margin_top"
+        android:layout_marginEnd="@dimen/custom_adapter_ad_title_layout_margin_end"
+        android:elevation="@dimen/custom_adapter_ad_title_elevation"
+        android:singleLine="true"
+        android:text="@string/ad_title"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/custom_adapter_ad_title_text_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageAd"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textValue"
+        android:layout_width="@dimen/custom_adapter_ad_value_layout_width"
+        android:layout_height="@dimen/custom_adapter_ad_value_layout_height"
+        android:layout_marginStart="@dimen/custom_adapter_ad_value_layout_margin_start"
+        android:layout_marginTop="@dimen/ad_details_value_layout_margin_top"
+        android:singleLine="true"
+        android:layout_marginEnd="@dimen/custom_adapter_ad_value_layout_margin_end"
+        android:text="@string/value"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageAd"
+        app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+
+    <TextView
+        android:id="@+id/textDescription"
+        android:layout_width="@dimen/custom_adapter_ad_description_layout_width"
+        android:layout_height="@dimen/custom_adapter_ad_description_layout_height"
+        android:layout_marginStart="@dimen/custom_adapter_ad_description_layout_margin_start"
+        android:layout_marginTop="@dimen/custom_adapter_ad_description_layout_margin_top"
+        android:layout_marginEnd="@dimen/custom_adapter_ad_description_layout_margin_end"
+        android:text="@string/description"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageAd"
+        app:layout_constraintTop_toBottomOf="@+id/textValue" />
+</androidx.constraintlayout.widget.ConstraintLayout>

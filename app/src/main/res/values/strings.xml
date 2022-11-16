@@ -1,0 +1,68 @@
+<resources>
+    <string name="app_name">OLX</string>
+    <string name="name">Name:</string>
+    <string name="e_mail">E-mail:</string>
+    <string name="password">Password:</string>
+    <string name="confirm_password">Confirm password:</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="not_registered">Not registered yet? \n Create your account for free!</string>
+    <string name="my_adds">My adds</string>
+    <string name="logout">Logout</string>
+    <string name="title_activity_my_adds">MyAddsActivity</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="register_ad">Register ad</string>
+    <string-array name="states">
+        <item>AC</item>
+        <item>AL</item>
+        <item>AP</item>
+        <item>AM</item>
+        <item>BA</item>
+        <item>CE</item>
+        <item>DF</item>
+        <item>ES</item>
+        <item>GO</item>
+        <item>MA</item>
+        <item>MT</item>
+        <item>MS</item>
+        <item>MG</item>
+        <item>PA</item>
+        <item>PB</item>
+        <item>PR</item>
+        <item>PE</item>
+        <item>PI</item>
+        <item>RJ</item>
+        <item>RN</item>
+        <item>RS</item>
+        <item>RO</item>
+        <item>RR</item>
+        <item>SP</item>
+        <item>SC</item>
+        <item>SE</item>
+        <item>TO</item>
+    </string-array>
+    <string-array name="category">
+        <item>Electronics</item>
+        <item>Services</item>
+        <item>Wearing</item>
+        <item>Cars and parts</item>
+        <item>For your house</item>
+        <item>Sports and wellness</item>
+        <item>Pets</item>
+        <item>Kids</item>
+    </string-array>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="phone_number">Phone number</string>
+    <string name="value">Value</string>
+    <string name="ad_title">Ad Title</string>
+    <string name="dash">|</string>
+    <string name="region">Region</string>
+    <string name="category">Category</string>
+    <string name="uf">UF</string>
+    <string name="call">Call</string>
+</resources>

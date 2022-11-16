@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable/custom_background_register_add.xml" value="0.129" />
+        <entry key="app/src/main/res/drawable/custom_dash.xml" value="0.129" />
+        <entry key="app/src/main/res/drawable/custom_dash_horizontal.xml" value="0.129" />
+        <entry key="app/src/main/res/drawable/custom_dash_vertical.xml" value="0.129" />
+        <entry key="app/src/main/res/drawable/ic_add_white_24.xml" value="0.1915" />
+        <entry key="app/src/main/res/drawable/ic_background_plain_text.xml" value="0.129" />
+        <entry key="app/src/main/res/drawable/ic_email_24_gray.xml" value="0.129" />
+        <entry key="app/src/main/res/drawable/ic_location_24.xml" value="0.1915" />
+        <entry key="app/src/main/res/drawable/ic_name_12_black.xml" value="0.129" />
+        <entry key="app/src/main/res/drawable/ic_password_24_gray.xml" value="0.129" />
+        <entry key="app/src/main/res/layout/activity_ad_details.xml" value="0.30512820512820515" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.22935779816513763" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/activity_my_adds.xml" value="0.30512820512820515" />
+        <entry key="app/src/main/res/layout/activity_my_ads.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_register.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_register_ad.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_register_add.xml" value="0.30512820512820515" />
+        <entry key="app/src/main/res/layout/content_my_adds.xml" value="0.30512820512820515" />
+        <entry key="app/src/main/res/layout/custom_adapter_ad.xml" value="0.30512820512820515" />
+        <entry key="app/src/main/res/layout/custom_dialog_spinner.xml" value="0.3041025641025641" />
+        <entry key="app/src/main/res/menu/custom_menu.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
