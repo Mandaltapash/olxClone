@@ -52,11 +52,11 @@
     <dimen name="ad_details_uf_layout_padding">@dimen/size_10</dimen>
     <dimen name="ad_details_value_layout_height">@dimen/size_40</dimen>
     <dimen name="ad_details_value_layout_margin_top">@dimen/size_10</dimen>
-    <dimen name="ad_details_value_padding">@dimen/size_5</dimen>
+    <dimen name="ad_details_value_padding">@dimen/size_8</dimen>
     <dimen name="ad_details_description_layout_height">@dimen/size_0</dimen>
     <dimen name="ad_details_description_layout_width">@dimen/size_0</dimen>
     <dimen name="ad_details_description_layout_margin_top_bottom">@dimen/size_10</dimen>
-    <dimen name="ad_details_description_layout_padding">@dimen/size_5</dimen>
+    <dimen name="ad_details_description_layout_padding">@dimen/size_8</dimen>
     <dimen name="ad_details_description_layout_margin_start_end">@dimen/size_10</dimen>
     <dimen name="ad_details_button_call_layout_margin_bottom">@dimen/size_16</dimen>
     <dimen name="login_layout_margin_start_end">@dimen/size_16</dimen>
