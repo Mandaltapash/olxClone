@@ -7,20 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".activity.AdDetailsActivity">
 
-    <com.synnapps.carouselview.CarouselView
-        android:id="@+id/carouselAds"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerImages"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ad_details_carousel_layout_height"
-        app:fillColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:pageColor="#00000000"
-        android:elevation="@dimen/ad_details_carousel_elevation"
-        app:radius="@dimen/ad_details_carousel_radius"
-        app:slideInterval="3000"
-        app:strokeColor="@color/custom_gray"
-        app:strokeWidth="@dimen/ad_details_carousel_stroke_width" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textAdDetailTitle"

@@ -6,11 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import com.synnapps.carouselview.ImageListener
-import com.tods.project_olx.R
 import com.tods.project_olx.databinding.ActivityAdDetailsBinding
-import com.tods.project_olx.databinding.ActivityMainBinding
 import com.tods.project_olx.model.Ad
 
 class AdDetailsActivity : AppCompatActivity() {
@@ -38,12 +38,28 @@ class AdDetailsActivity : AppCompatActivity() {
     }
 
     private fun configCarousel() {
-        val imageListener: ImageListener = ImageListener { position, imageView ->
-            val urlString: String = selectedAd.adImages[position]
-            Picasso.get().load(urlString).into(imageView)
+        val imageAdapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+                val imageView = ImageView(parent.context)
+                imageView.layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                return object : RecyclerView.ViewHolder(imageView) {}
+            }
+
+            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+                val imageView = holder.itemView as ImageView
+                val urlString: String = selectedAd.adImages[position]
+                Picasso.get().load(urlString).into(imageView)
+            }
+
+            override fun getItemCount(): Int {
+                return selectedAd.adImages.size
+            }
         }
-        binding.carouselAds.pageCount = selectedAd.adImages.size
-        binding.carouselAds.setImageListener(imageListener)
+        binding.viewPagerImages.adapter = imageAdapter
     }
 
     private fun configAdDetails() {

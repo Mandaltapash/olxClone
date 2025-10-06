@@ -7,12 +7,11 @@ pluginManagement {
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
+    repositories {        google()
         mavenCentral()
-        maven { url "https://jitpack.io" }
-        jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
+
 rootProject.name = "Project_OLX"
 include ':app'
