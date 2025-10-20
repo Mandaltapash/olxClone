@@ -34,9 +34,9 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
-        viewBinding true
+        viewBinding = true
     }
-    namespace 'com.tods.project_olx'
+    namespace = 'com.tods.project_olx'
 }
 
 dependencies {

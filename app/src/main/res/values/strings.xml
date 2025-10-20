@@ -43,14 +43,13 @@
         <item>TO</item>
     </string-array>
     <string-array name="category">
+        <item>Furniture</item>
         <item>Electronics</item>
-        <item>Services</item>
-        <item>Wearing</item>
-        <item>Cars and parts</item>
-        <item>For your house</item>
-        <item>Sports and wellness</item>
-        <item>Pets</item>
-        <item>Kids</item>
+        <item>Fashion</item>
+        <item>Books</item>
+        <item>Sports</item>
+        <item>Free Zone (giveaway items)</item>
+        <item>Other</item>
     </string-array>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -65,4 +64,8 @@
     <string name="category">Category</string>
     <string name="uf">UF</string>
     <string name="call">Call</string>
+    <string name="search_hint">Search Items...</string>
+    <string name="all_categories">All Categories</string>
+    <string name="fresh_recommendations">Fresh recommendations</string>
 </resources>
+

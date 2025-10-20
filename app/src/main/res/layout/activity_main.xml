@@ -1,52 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity"
-    android:backgroundTint="@color/custom_gray_bc">
+    android:background="#F5F5F5"
+    tools:context=".activity.MainActivity">
 
-
-    <Button
-        android:id="@+id/buttonRegion"
-        style="?attr/buttonBarButtonStyle"
-        android:layout_width="@dimen/main_button_layout_width"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/region"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:theme="@style/Theme.Project_OLX.AppBarOverlay">
 
-    <Button
-        android:id="@+id/buttonCategory"
-        style="?attr/buttonBarButtonStyle"
-        android:layout_width="@dimen/main_button_layout_width"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:title="@string/app_name"
+            app:popupTheme="@style/Theme.Project_OLX.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appBarLayout"
+        android:layout_above="@id/bottom_navigation">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Search Bar -->
+            <EditText
+                android:id="@+id/searchBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_hint"
+                android:background="@drawable/ic_background_plain_text"
+                android:padding="12dp"
+                android:drawableStart="@android:drawable/ic_menu_search"
+                android:drawablePadding="8dp"
+                android:layout_margin="8dp"
+                android:elevation="2dp"
+                android:inputType="text"
+                android:autofillHints="name" />
+
+            <!-- Categories Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all_categories"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerCategories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/category"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_nav_menu"
+        android:background="?android:attr/windowBackground"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerPublicAds"
-        android:layout_width="@dimen/main_recycler_layout_width"
-        android:layout_height="@dimen/main_recycler_layout_height"
-        android:layout_marginStart="@dimen/main_recycler_layout_margin"
-        android:layout_marginTop="@dimen/main_recycler_layout_margin"
-        android:layout_marginEnd="@dimen/main_recycler_layout_margin"
-        android:layout_marginBottom="@dimen/main_recycler_layout_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRegion" />
+</RelativeLayout>
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="@dimen/main_divisor_layout_width"
-        android:layout_height="@dimen/main_divisor_layout_height"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonCategory"
-        app:layout_constraintEnd_toStartOf="@+id/buttonCategory"
-        app:layout_constraintStart_toEndOf="@+id/buttonRegion"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/custom_dash_vertical" />
-</androidx.constraintlayout.widget.ConstraintLayout>
