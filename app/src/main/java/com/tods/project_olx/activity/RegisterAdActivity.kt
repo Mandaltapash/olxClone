@@ -29,11 +29,12 @@ import com.tods.project_olx.databinding.ActivityRegisterAdBinding
 import com.tods.project_olx.model.Ad
 import com.tods.project_olx.model.User
 import java.util.*
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val SELECTION_GALLERY_AD1 = 100
 private const val SELECTION_GALLERY_AD2 = 200
 private const val SELECTION_GALLERY_AD3 = 300
-
+@AndroidEntryPoint
 class RegisterAddActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterAdBinding
     private lateinit var ad: Ad

@@ -15,7 +15,8 @@ import com.tods.project_olx.R
 import com.tods.project_olx.databinding.ActivityLoginBinding
 import com.tods.project_olx.databinding.ActivityRegisterBinding
 import com.tods.project_olx.model.User
-
+import dagger.hilt.android.AndroidEntryPoint
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityLoginBinding

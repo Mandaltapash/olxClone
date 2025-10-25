@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.tods.project_olx.databinding.ActivityAdDetailsBinding
 import com.tods.project_olx.model.Ad
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AdDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdDetailsBinding
     private lateinit var selectedAd: Ad

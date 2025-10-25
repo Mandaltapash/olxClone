@@ -14,7 +14,8 @@ import com.tods.project_olx.databinding.ActivityMyAdsBinding
 import com.tods.project_olx.helper.RecyclerItemClickListener
 import com.tods.project_olx.model.Ad
 import com.tods.project_olx.model.User
-
+import dagger.hilt.android.AndroidEntryPoint
+@AndroidEntryPoint
 class MyAdsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMyAdsBinding
     private lateinit var recyclerMyAds: RecyclerView
