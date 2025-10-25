@@ -1,17 +1,26 @@
-package com.tods.project_olx.viewmodel
+package com.tods.project_olx.presentation.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import com.tods.project_olx.data.repository.AdRepository
 import com.tods.project_olx.model.Ad
-import com.tods.project_olx.repository.AdRepository
+import com.tods.project_olx.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AdViewModel(private val repository: AdRepository) : ViewModel() {
+@HiltViewModel
+class AdViewModel @Inject constructor(
+    private val repository: AdRepository,
+    private val auth: FirebaseAuth
+) : ViewModel() {
 
-    private val _ads = MutableLiveData<Result<List<Ad>>>()
-    val ads: LiveData<Result<List<Ad>>> = _ads
+    private val _ads = MutableLiveData<Resource<List<Ad>>>()
+    val ads: LiveData<Resource<List<Ad>>> = _ads
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -21,16 +30,15 @@ class AdViewModel(private val repository: AdRepository) : ViewModel() {
 
     fun fetchAds(region: String? = null, category: String? = null) {
         viewModelScope.launch {
-            _isLoading.value = true
-            try {
-                val result = repository.getAds(region, category)
-                _ads.value = Result.success(result)
-            } catch (e: Exception) {
-                _error.value = e.message
-                _ads.value = Result.failure(e)
-            } finally {
-                _isLoading.value = false
-            }
+            repository.getAdsFlow(region, category)
+                .catch { e ->
+                    _error.postValue(e.message)
+                    _ads.postValue(Resource.Error(e.message ?: "Unknown error"))
+                }
+                .collect { resource ->
+                    _ads.postValue(resource)
+                    _isLoading.postValue(resource is Resource.Loading)
+                }
         }
     }
 
@@ -38,8 +46,19 @@ class AdViewModel(private val repository: AdRepository) : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.saveAd(ad)
-                _error.value = null
+                val userId = auth.currentUser?.uid ?: throw Exception("User not logged in")
+                val result = repository.saveAd(ad, userId)
+
+                when (result) {
+                    is Resource.Success -> {
+                        _error.value = null
+                        fetchAds()
+                    }
+                    is Resource.Error -> {
+                        _error.value = result.message
+                    }
+                    else -> {}
+                }
             } catch (e: Exception) {
                 _error.value = e.message
             } finally {
@@ -51,7 +70,9 @@ class AdViewModel(private val repository: AdRepository) : ViewModel() {
     fun deleteAd(ad: Ad) {
         viewModelScope.launch {
             try {
-                repository.deleteAd(ad)
+                val userId = auth.currentUser?.uid ?: throw Exception("User not logged in")
+                repository.deleteAd(ad, userId)
+                fetchAds()
             } catch (e: Exception) {
                 _error.value = e.message
             }
@@ -60,16 +81,5 @@ class AdViewModel(private val repository: AdRepository) : ViewModel() {
 
     fun clearError() {
         _error.value = null
-    }
-}
-
-// ViewModelFactory
-class AdViewModelFactory(private val repository: AdRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AdViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return AdViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

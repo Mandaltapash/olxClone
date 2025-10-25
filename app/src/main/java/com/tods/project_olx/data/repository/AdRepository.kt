@@ -1,18 +1,21 @@
-package com.tods.project_olx.repository
+package com.tods.project_olx.data.repository // ✅ PACKAGE SAHI KIYA
 
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.tods.project_olx.data.local.AdDao
-import com.tods.project_olx.data.local.toAd
-import com.tods.project_olx.data.local.toEntity
+import com.tods.project_olx.data.local.AdEntity
 import com.tods.project_olx.model.Ad
+import com.tods.project_olx.utils.Resource
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AdRepository @Inject constructor(
     private val database: FirebaseDatabase,
     private val storage: FirebaseStorage,
@@ -21,19 +24,34 @@ class AdRepository @Inject constructor(
     private val adsRef = database.getReference("ads")
     private val myAdsRef = database.getReference("my_adds")
 
-    // Get ads with offline support
-    suspend fun getAds(region: String? = null, category: String? = null): List<Ad> {
-        return try {
-            // Try to fetch from network
+    // Get ads with offline support using Flow
+    fun getAdsFlow(region: String? = null, category: String? = null): Flow<Resource<List<Ad>>> = flow {
+        emit(Resource.Loading())
+
+        try {
+            // First emit cached data
+            val cachedAds = getFromCache(region, category)
+            if (cachedAds.isNotEmpty()) {
+                emit(Resource.Success(cachedAds))
+            }
+
+            // Then try to fetch from network
             val networkAds = fetchFromNetwork(region, category)
 
             // Cache in local database
-            adDao.insertAll(networkAds.map { it.toEntity() })
+            networkAds.forEach { ad ->
+                adDao.insertAd(ad.toEntity())
+            }
 
-            networkAds
+            emit(Resource.Success(networkAds))
         } catch (e: Exception) {
-            // Fallback to local cache
-            getFromCache(region, category)
+            // If network fails, return cached data
+            val cachedAds = getFromCache(region, category)
+            if (cachedAds.isNotEmpty()) {
+                emit(Resource.Success(cachedAds))
+            } else {
+                emit(Resource.Error(e.message ?: "Unknown error occurred"))
+            }
         }
     }
 
@@ -64,19 +82,16 @@ class AdRepository @Inject constructor(
     }
 
     private suspend fun getFromCache(region: String?, category: String?): List<Ad> {
-        val flow = when {
-            region != null && category != null -> adDao.getAdsByRegionAndCategory(region, category)
-            region != null -> adDao.getAdsByRegion(region)
-            category != null -> adDao.getAdsByCategory(category)
-            else -> adDao.getAllAds()
-        }
-
-        // Convert Flow to List (take first emission)
-        var cachedAds: List<Ad> = emptyList()
-        flow.collect { entities ->
-            cachedAds = entities.map { it.toAd() }
-        }
-        return cachedAds
+        val entities = adDao.getAllAds() // Now returns List<AdEntity>
+        return entities.filter { entity ->
+            when {
+                region != null && category != null ->
+                    entity.state == region && entity.category == category
+                region != null -> entity.state == region
+                category != null -> entity.category == category
+                else -> true
+            }
+        }.map { it.toAd() }
     }
 
     // Observe ads in real-time
@@ -103,26 +118,29 @@ class AdRepository @Inject constructor(
         awaitClose { query.removeEventListener(listener) }
     }
 
-    suspend fun saveAd(ad: Ad, userId: String) {
-        try {
+    suspend fun saveAd(ad: Ad, userId: String): Resource<Unit> {
+        return try {
             // Save to Firebase
             myAdsRef.child(userId).child(ad.id).setValue(ad).await()
             adsRef.child(ad.state).child(ad.category).child(ad.id).setValue(ad).await()
 
             // Save to local cache
             adDao.insertAd(ad.toEntity())
+
+            Resource.Success(Unit)
         } catch (e: Exception) {
-            throw Exception("Failed to save ad: ${e.message}")
+            Resource.Error(e.message ?: "Failed to save ad")
         }
     }
 
-    suspend fun deleteAd(ad: Ad, userId: String) {
-        try {
+    suspend fun deleteAd(ad: Ad, userId: String): Resource<Unit> {
+        return try {
             myAdsRef.child(userId).child(ad.id).removeValue().await()
             adsRef.child(ad.state).child(ad.category).child(ad.id).removeValue().await()
-            adDao.deleteAd(ad.toEntity())
+
+            Resource.Success(Unit)
         } catch (e: Exception) {
-            throw Exception("Failed to delete ad: ${e.message}")
+            Resource.Error(e.message ?: "Failed to delete ad")
         }
     }
 
@@ -144,17 +162,32 @@ class AdRepository @Inject constructor(
             throw Exception("Failed to fetch user ads: ${e.message}")
         }
     }
+}
 
-    // Search functionality
-    fun searchAds(query: String): Flow<List<Ad>> {
-        return adDao.searchAds(query).map { entities ->
-            entities.map { it.toAd() }
-        }
-    }
+// Extension functions
+fun Ad.toEntity(): AdEntity {
+    return AdEntity(
+        id = this.id,
+        state = this.state,
+        category = this.category,
+        title = this.title,
+        description = this.description,
+        value = this.value,
+        phone = this.phone,
+        images = this.adImages.joinToString(","),
+        timestamp = System.currentTimeMillis()
+    )
+}
 
-    // Clean old cache (older than 7 days)
-    suspend fun cleanOldCache() {
-        val sevenDaysAgo = System.currentTimeMillis() - (7 * 24 * 60 * 60 * 1000)
-        adDao.deleteOldAds(sevenDaysAgo)
-    }
+fun AdEntity.toAd(): Ad {
+    return Ad(
+        id = this.id,
+        state = this.state,
+        category = this.category,
+        title = this.title,
+        description = this.description,
+        value = this.value,
+        phone = this.phone,
+        adImages = this.images.split(",").filter { it.isNotEmpty() }
+    )
 }

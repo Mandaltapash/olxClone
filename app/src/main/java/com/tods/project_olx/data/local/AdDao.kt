@@ -4,35 +4,38 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.tods.project_olx.data.local.AdEntity // <-- YEH LINE ADD KI HAI
-
+import androidx.room.Delete
 
 @Dao
 interface AdDao {
 
-    /**
-     * Naya Ad insert karta hai ya purane ko replace kar deta hai
-     * agar primary key (id) same hai.
-     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAd(ad: AdEntity)
 
-    /**
-     * Database se saare ads nikal kar list mein deta hai.
-     */
-    @Query("SELECT * FROM ads")
+    @Query("SELECT * FROM ads ORDER BY timestamp DESC")
     suspend fun getAllAds(): List<AdEntity>
 
-    /**
-     * Ek specific Ad ko uski ID se dhoondhta hai.
-     */
     @Query("SELECT * FROM ads WHERE id = :adId")
     suspend fun getAdById(adId: String): AdEntity?
 
-    /**
-     * Database se saare ads delete kar deta hai.
-     */
+    @Query("SELECT * FROM ads WHERE state = :region ORDER BY timestamp DESC")
+    suspend fun getAdsByRegion(region: String): List<AdEntity>
+
+    @Query("SELECT * FROM ads WHERE category = :category ORDER BY timestamp DESC")
+    suspend fun getAdsByCategory(category: String): List<AdEntity>
+
+    @Query("SELECT * FROM ads WHERE state = :region AND category = :category ORDER BY timestamp DESC")
+    suspend fun getAdsByRegionAndCategory(region: String, category: String): List<AdEntity>
+
+    @Query("SELECT * FROM ads WHERE title LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%' ORDER BY timestamp DESC")
+    suspend fun searchAds(query: String): List<AdEntity>
+
     @Query("DELETE FROM ads")
     suspend fun deleteAllAds()
-}
 
+    @Query("DELETE FROM ads WHERE timestamp < :timestamp")
+    suspend fun deleteOldAds(timestamp: Long)
+
+    @Delete
+    suspend fun deleteAd(ad: AdEntity)
+}
