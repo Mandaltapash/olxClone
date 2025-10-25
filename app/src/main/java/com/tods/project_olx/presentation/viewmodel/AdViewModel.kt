@@ -1,4 +1,4 @@
-package com.tods.project_olx.presentation.viewmodel
+package com.tods.project_olx.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

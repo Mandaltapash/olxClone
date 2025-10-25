@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.tods.project_olx.R
 import com.tods.project_olx.adapter.AdAdapter
@@ -82,13 +83,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupAdsRecyclerView() {
         adAdapter = AdAdapter { ad ->
-            // Navigate to ad details
             val intent = Intent(this, AdDetailsActivity::class.java).apply {
                 putExtra("selectedAd", ad)
             }
             startActivity(intent)
         }
 
+        // Check if recyclerAds exists in layout
         binding.recyclerAds?.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = adAdapter
@@ -130,7 +131,6 @@ class MainActivity : AppCompatActivity() {
                     if (auth.currentUser == null) {
                         startActivity(Intent(this, LoginActivity::class.java))
                     } else {
-                        // Navigate to profile/account screen
                         Toast.makeText(this, "Profile: ${auth.currentUser?.email}", Toast.LENGTH_SHORT).show()
                     }
                     true
@@ -155,25 +155,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun searchAds(query: String) {
-        // Implement search logic
         lifecycleScope.launch {
-            adViewModel.ads.value?.getOrNull()?.let { ads ->
-                val filtered = ads.filter { ad ->
-                    ad.title.contains(query, ignoreCase = true) ||
-                            ad.description.contains(query, ignoreCase = true)
+            adViewModel.ads.value?.let { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        val filtered = result.data?.filter { ad ->
+                            ad.title.contains(query, ignoreCase = true) ||
+                                    ad.description.contains(query, ignoreCase = true)
+                        }
+                        adAdapter.submitList(filtered)
+                    }
+                    else -> {}
                 }
-                adAdapter.submitList(filtered)
             }
         }
     }
 
     private fun observeViewModel() {
         adViewModel.ads.observe(this) { result ->
-            result.onSuccess { ads ->
-                adAdapter.submitList(ads)
-                binding.emptyStateView?.isVisible = ads.isEmpty()
-            }.onFailure { exception ->
-                Toast.makeText(this, exception.message, Toast.LENGTH_SHORT).show()
+            when (result) {
+                is Resource.Success -> {
+                    adAdapter.submitList(result.data)
+                    binding.emptyStateView?.isVisible = result.data?.isEmpty() == true
+                }
+                is Resource.Error -> {
+                    Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Loading -> {
+                    // Handle loading
+                }
             }
         }
 

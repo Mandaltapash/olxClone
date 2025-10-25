@@ -1,7 +1,7 @@
 package com.tods.project_olx.activity
 
 import android.app.AlertDialog
-import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,16 +14,13 @@ import com.tods.project_olx.databinding.ActivityMyAdsBinding
 import com.tods.project_olx.helper.RecyclerItemClickListener
 import com.tods.project_olx.model.Ad
 import com.tods.project_olx.model.User
-import dmax.dialog.SpotsDialog
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MyAdsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMyAdsBinding
     private lateinit var recyclerMyAds: RecyclerView
     private lateinit var adUserRef: DatabaseReference
-    private lateinit var dialog: android.app.AlertDialog
-    private var ads: MutableList<Ad> = ArrayList<Ad>()
+    private lateinit var dialog: ProgressDialog  // ✅ Changed from SpotsDialog
+    private var ads: MutableList<Ad> = ArrayList()
     private var adapterAd: AdapterAd = AdapterAd(ads)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,15 +32,15 @@ class MyAdsActivity : AppCompatActivity() {
         recoverAds()
     }
 
-    private fun recoverAds(){
+    private fun recoverAds() {
         configDialog()
         adUserRef = FirebaseDatabase.getInstance()
             .getReference("my_adds")
             .child(User().configCurrentUser()!!.uid.toString())
-        adUserRef.addValueEventListener(object: ValueEventListener{
+        adUserRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 ads.clear()
-                for (ds: DataSnapshot in snapshot.children){
+                for (ds: DataSnapshot in snapshot.children) {
                     ads.add(ds.getValue(Ad::class.java)!!)
                 }
                 ads.reverse()
@@ -52,18 +49,16 @@ class MyAdsActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                dialog.dismiss()
             }
-
         })
     }
 
     private fun configDialog() {
-        dialog = SpotsDialog.Builder()
-            .setContext(this)
-            .setMessage("Recovering ads")
-            .setCancelable(false)
-            .build()
+        // ✅ Using standard ProgressDialog instead of SpotsDialog
+        dialog = ProgressDialog(this)
+        dialog.setMessage("Recovering ads...")
+        dialog.setCancelable(false)
         dialog.show()
     }
 
@@ -72,38 +67,38 @@ class MyAdsActivity : AppCompatActivity() {
         recyclerMyAds.layoutManager = LinearLayoutManager(this)
         recyclerMyAds.setHasFixedSize(true)
         recyclerMyAds.adapter = adapterAd
-        recyclerMyAds.addOnItemTouchListener(RecyclerItemClickListener
-            (this, recyclerMyAds, object: RecyclerItemClickListener.OnItemClickListener{
-            override fun onItemClick(view: View, position: Int) {
-                null
-            }
+        recyclerMyAds.addOnItemTouchListener(
+            RecyclerItemClickListener(
+                this, recyclerMyAds, object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        // Handle item click
+                    }
 
-            override fun onItemLongClick(view: View?, position: Int) {
-                val dialog: AlertDialog.Builder = AlertDialog.Builder(view!!.context)
-                dialog.setTitle("Do you want to remove this ad?")
-                dialog.setPositiveButton("Yes"){ _, _ ->
-                    val selectedAd: Ad = ads[position]
-                    selectedAd.remove()
-                }
-                dialog.setNegativeButton("Cancel"){ _, _ ->
-
-                }
-                val executeDialog: Dialog = dialog.create()
-                executeDialog.show()
-            }
-        }))
+                    override fun onItemLongClick(view: View?, position: Int) {
+                        val dialog: AlertDialog.Builder = AlertDialog.Builder(view!!.context)
+                        dialog.setTitle("Do you want to remove this ad?")
+                        dialog.setPositiveButton("Yes") { _, _ ->
+                            val selectedAd: Ad = ads[position]
+                            selectedAd.remove()
+                        }
+                        dialog.setNegativeButton("Cancel") { _, _ -> }
+                        val executeDialog = dialog.create()
+                        executeDialog.show()
+                    }
+                })
+        )
     }
 
     private fun configToolbar() {
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.title = "My Ads"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "My Ads"
     }
 
     private fun configFabNewAd() {
-        binding.fabNewAdd.setOnClickListener(View.OnClickListener {
-            val intent: Intent = Intent(applicationContext, RegisterAddActivity::class.java)
+        binding.fabNewAdd.setOnClickListener {
+            val intent = Intent(applicationContext, RegisterAddActivity::class.java)
             startActivity(intent)
-        })
+        }
     }
 
     private fun configViewBinding() {
