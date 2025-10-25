@@ -16,6 +16,20 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <!-- ✅ YE LINES ADD KARO - Hardware features -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.DIAL"/>
@@ -132,7 +146,7 @@
         <!-- Crashlytics -->
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
-            android:value="true" />
+            android:value="false" />
 
     </application>
 

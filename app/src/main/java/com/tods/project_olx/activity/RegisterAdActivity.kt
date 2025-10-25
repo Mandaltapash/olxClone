@@ -31,6 +31,7 @@ import com.tods.project_olx.model.User
 import java.util.*
 import dagger.hilt.android.AndroidEntryPoint
 
+
 private const val SELECTION_GALLERY_AD1 = 100
 private const val SELECTION_GALLERY_AD2 = 200
 private const val SELECTION_GALLERY_AD3 = 300

@@ -2,8 +2,9 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
-    id 'com.google.dagger.hilt.android' // <-- YAHAN BADLAV KIYA HAI
+    id 'com.google.dagger.hilt.android'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -26,9 +27,15 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            firebaseCrashlytics {
+                mappingFileUploadEnabled true
+            }
         }
         debug {
             minifyEnabled false
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
         }
     }
 

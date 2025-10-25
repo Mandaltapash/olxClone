@@ -19,12 +19,14 @@ data class Ad(
     var description: String = "",
     var value: String = "",
     var phone: String = "",
-    var adImages: List<String> = mutableListOf()): Serializable{
+    var adImages: List<String> = mutableListOf()
+): Serializable {
+
     private lateinit var database: DatabaseReference
 
-
     fun save(){
-        database = FirebaseDatabase.getInstance().getReference("my_adds")
+        database = FirebaseDatabase.getInstance()
+            .getReference("my_adds")
             .child(User().configCurrentUser()!!.uid.toString())
             .child(id)
         database.setValue(this)
@@ -32,7 +34,8 @@ data class Ad(
     }
 
     private fun savePublic(){
-        database = FirebaseDatabase.getInstance().getReference("adds")
+        database = FirebaseDatabase.getInstance()
+            .getReference("ads")  // ✅ "adds" se "ads" change kiya
             .child(state)
             .child(category)
             .child(id)
@@ -40,7 +43,8 @@ data class Ad(
     }
 
     fun remove(){
-        database = FirebaseDatabase.getInstance().getReference("my_adds")
+        database = FirebaseDatabase.getInstance()
+            .getReference("my_adds")
             .child(User().configCurrentUser()!!.uid.toString())
             .child(id)
         database.removeValue()
@@ -48,7 +52,8 @@ data class Ad(
     }
 
     private fun removePublic(){
-        database = FirebaseDatabase.getInstance().getReference("adds")
+        database = FirebaseDatabase.getInstance()
+            .getReference("ads")  // ✅ "adds" se "ads" change kiya
             .child(state)
             .child(category)
             .child(id)
