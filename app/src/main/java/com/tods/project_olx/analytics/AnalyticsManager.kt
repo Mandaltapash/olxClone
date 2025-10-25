@@ -117,21 +117,3 @@ class AnalyticsManager @Inject constructor(
         analytics.setUserProperty(name, value)
     }
 }
-
-// Analytics Module for Hilt
-@Module
-@InstallIn(SingletonComponent::class)
-object AnalyticsModule {
-
-    @Provides
-    @Singleton
-    fun provideFirebaseAnalytics(@ApplicationContext context: Context): FirebaseAnalytics {
-        return FirebaseAnalytics.getInstance(context)
-    }
-
-    @Provides
-    @Singleton
-    fun provideFirebaseCrashlytics(): FirebaseCrashlytics {
-        return FirebaseCrashlytics.getInstance()
-    }
-}
